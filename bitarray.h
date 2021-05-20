@@ -2,7 +2,8 @@
 #define BITARRAY_H
 
 typedef struct _bitarray {
-	/* TO DO */
+	unsigned char* tab;
+	int size;
 } bitarray;
 
 /* Return a pointer to an empty bitarray that can store m bits */

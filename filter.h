@@ -1,8 +1,11 @@
+#include "bitarray.h"
+
 #ifndef FILTER_H
 #define FILTER_H
 
-typedef struct_filter {
-	/* TODO */
+typedef struct _filter {
+	bitarray* a;
+	int* poids;
 } filter;
 
 /* Return a pointer to an empty filter with parameters m and k */
