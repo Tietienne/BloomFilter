@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Wall -ansi -std=c99
+CFLAGS=-Wall -ansi -std=c99 -lm
 DEPS=bitarray.h filter.h
 OBJ=bitarray.o filter.o
 
