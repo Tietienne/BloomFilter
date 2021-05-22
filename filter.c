@@ -20,7 +20,8 @@ filter *create_filter(int m, int k) {
 		fprintf(stderr, "Not enough memory ! Program abort !\n");
 		exit(1);
 	}
-	for (int i=0; i<k; i++) {
+	int i = 0;
+	for (i=0; i<k; i++) {
 		f->weight[i] = rand() % 255;
 	}
 	return f;

@@ -8,6 +8,11 @@ bitarray *create_bitarray(int m) {
 	if(a != NULL) {
 		a->size = m;
 		a->tab = (unsigned char*) malloc (sizeof(unsigned char)*m);
+		
+		int i = 0;
+		for(i=0; i<m; i++) {
+			a->tab[i] = 0;
+		}
 		if(a->tab == NULL) {
 			fprintf(stderr, "Not enough memory ! Program abort !\n");
 			exit(1);
@@ -48,7 +53,8 @@ void clear_bitarray(bitarray *a) {
 	if(a==NULL) {
 		return;
 	}
-	for (int i=0; i<a->size; i++) {
+	int i = 0;
+	for (i=0; i<a->size; i++) {
 		a->tab[i] = 0;
 	}
 }

@@ -1,14 +1,15 @@
 CC=gcc
-CFLAGS=-Wall -ansi -std=c99 -lm
+CFLAGS=-Wall -ansi -g
+LDFLAGS=-lm
 DEPS=bitarray.h filter.h
 OBJ=bitarray.o filter.o
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-main: main.c $(OBJ)
-	$(CC) -lm -o $@ $^ $(CFLAGS)
+test: test.o $(OBJ)
+	gcc -o $@ $^ $(LDFLAGS)
 
 .PHONY: clean
 clean:
-	rm -f $(OBJ) main main.o bitarray.o filter.o
+	rm -f $(OBJ) test test.o
