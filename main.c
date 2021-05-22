@@ -4,11 +4,9 @@
 #include <stdlib.h>
 
 int main(int argc, char* argv[]) {
-	filter *f = create_filter(10,2);
+	filter *f = create_filter(100,2);
 	
 	add_filter(f, "oui");
-
-	display_filter(f);
 
 	if(is_member_filter(f,"oui")){
 		printf("Member\n");

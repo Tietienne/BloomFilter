@@ -37,10 +37,10 @@ void hash(filter *f, char *str, unsigned hashes[]) {
 	int lenght = strlen(str);
 	for(i=0; i<f->k; i++) {
 		int hash_value = 0;
-		for(j=0; j<lenght; j++) {
+		for(j=0; str[j]!='\0'; j++) {
 			hash_value += pow((double)(f->weight[i]),(double)(lenght-i)) * (int)str[i];
 		}
-		hashes[i] = hash_value % f->a->size;
+		hashes[i] = hash_value;
 	}
 }
 
@@ -49,7 +49,7 @@ void add_filter(filter *f, char *str) {
 	unsigned hashes[f->k];
 	hash(f, str, hashes);
 	for(i=0; i<f->k; i++) {
-		set_bitarray(f->a, hashes[i]);
+		set_bitarray(f->a, hashes[i] % f->a->size);
 	}
 }
 
@@ -58,7 +58,7 @@ int is_member_filter(filter *f, char *str) {
 	unsigned hashes[f->k];
 	hash(f, str, hashes);
 	for(i=0; i<f->k; i++) {
-		if(!get_bitarray(f->a, hashes[i])) {
+		if(get_bitarray(f->a, hashes[i] % f->a->size) != 1) {
 			return 0;
 		}
 	}
