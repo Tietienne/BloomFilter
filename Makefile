@@ -7,7 +7,7 @@ OBJ=bitarray.o filter.o
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-test: test.o $(OBJ)
+main: main.o $(OBJ)
 	gcc -o $@ $^ $(LDFLAGS)
 
 .PHONY: clean
