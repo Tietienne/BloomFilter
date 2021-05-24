@@ -6,6 +6,8 @@
 #include "bitarray.h"
 #include "filter.h"
 
+#define MAX_SIZE_PASSWORD 128
+
 const char* program_name;
 
 void print_usage(FILE* stream, int exit_code) {
@@ -13,26 +15,22 @@ void print_usage(FILE* stream, int exit_code) {
     fprintf(stream,
         "-h --help      Affiche ce message.\n"
         "-f --file      Donne le nom du fichier à charger.\n"
-        "-v --verbose   Affiche les messages détaillés.\n"
         "-k             Donne le nombre de fonctions de hachage.\n"
         "-m             Donne le nombre de bit dans le bit array.\n");
     exit(exit_code);
 }
 
 int main(int argc, char *argv[]) {
-    const char* const short_options = "hf:vk:m:";
+    const char* const short_options = "hf:k:m:";
     const struct option long_options[] = {
         {"help"   , 0, NULL, 'h'},
         {"file"   , 0, NULL, 'f'},
-        {"verbose", 1, NULL, 'v'},
         {NULL     , 0, NULL, 'k'},
         {NULL     , 0, NULL, 'm'},
         {NULL     , 0, NULL,  0 }
     };
-
-    const char* output_filename = NULL;
     const char* file_to_read = NULL;
-    int verbose = 0, k = 0, m = 0;
+    int k = 4, m = 2048;
     int next_option;
     
     program_name = argv[0];
@@ -47,9 +45,6 @@ int main(int argc, char *argv[]) {
             break;
         case 'f':
             file_to_read = optarg;
-            break;
-        case 'v':
-            verbose = 1;
             break;
         case 'k':
             k = atoi(optarg);
@@ -67,14 +62,33 @@ int main(int argc, char *argv[]) {
         }
     } while(next_option != -1);
 
-    if(verbose) {
-        int i;
-        for(i = optind; i<argc; ++i) {
-            printf("Argument : %s\n", argv[i]);
-        }
+    /*TODO Programme ici*/
+    FILE* file = fopen(file_to_read,"r");
+    if(file == NULL) {
+        fprintf(stderr, "File doesn't exist.\n");
+        exit(1);
     }
 
-    /*TODO Programme ici*/
+    filter* f = create_filter(m,k);
+    char word[MAX_SIZE_PASSWORD];
+    while( fscanf(file,"%1024s",word)==1 ) {
+        add_filter(f, word);
+    }
+    fclose(file);
+
+    FILE* file2 = fopen(file_to_read,"r");
+    if(file2 == NULL) {
+        fprintf(stderr, "File doesn't exist.\n");
+        exit(1);
+    }
+    while( fscanf(file2,"%1024s",word)==1 ) {
+        if(is_member_filter(f, word)) {
+            printf("%s is maybe in the filter.\n",word);
+        } else {
+            printf("%s isn't in the filter.\n",word);
+        }
+    }
+    fclose(file2);
 
     return 0;
 }
