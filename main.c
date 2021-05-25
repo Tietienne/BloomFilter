@@ -72,6 +72,7 @@ int main(int argc, char *argv[]) {
     filter* f = create_filter(m,k);
     char word[MAX_SIZE_PASSWORD];
     while( fscanf(file,"%1024s",word)==1 ) {
+        printf("%s\n", word);
         add_filter(f, word);
     }
     fclose(file);
@@ -89,6 +90,7 @@ int main(int argc, char *argv[]) {
         }
     }
     fclose(file2);
+    free_filter(f);
 
     return 0;
 }
