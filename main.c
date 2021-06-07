@@ -5,6 +5,8 @@
 #include <time.h>
 #include "bitarray.h"
 #include "filter.h"
+#include "hashTable.h"
+#include "link.h"
 
 #define MAX_SIZE_PASSWORD 128
 
@@ -30,7 +32,7 @@ int main(int argc, char *argv[]) {
         {NULL     , 0, NULL,  0 }
     };
     const char* file_to_read = NULL;
-    int k = 4, m = 2048;
+    int k = 4, m = 8192;
     int next_option;
     
     program_name = argv[0];
@@ -70,26 +72,33 @@ int main(int argc, char *argv[]) {
     }
 
     filter* f = create_filter(m,k);
+    table* hashTable = create_table(m);
     char word[MAX_SIZE_PASSWORD];
     while( fscanf(file,"%1024s",word)==1 ) {
         add_filter(f, word);
+        add_occ(hashTable, word, 0);
     }
     fclose(file);
 
-    FILE* file2 = fopen(file_to_read,"r");
+    FILE* file2 = fopen("word.txt","r");
     if(file2 == NULL) {
         fprintf(stderr, "File doesn't exist.\n");
         exit(1);
     }
+    int maybe = 0;
+    int isin = 0;
     while( fscanf(file2,"%1024s",word)==1 ) {
         if(is_member_filter(f, word)) {
-            printf("%s is maybe in the filter.\n",word);
-        } else {
-            printf("%s isn't in the filter.\n",word);
+            maybe++;
+            if(table_find(hashTable, word) != NULL) {
+                isin++;
+            }
         }
     }
     fclose(file2);
     free_filter(f);
+    free_table(hashTable);
 
+    printf("%d -> %d\n",maybe, isin);
     return 0;
 }
