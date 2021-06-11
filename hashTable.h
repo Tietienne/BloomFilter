@@ -16,5 +16,5 @@ int hashHash(char *str,int a,int M);
 int insert(table* tb, char* str, int attempt);
 link *table_find(table* tb, char *str);
 
-void add_occ(table *tb, char *str, int pos);
+void add_occ(table *tb, char *str);
 void display_table(table *tb);

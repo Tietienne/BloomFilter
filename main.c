@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
         {NULL     , 0, NULL,  0 }
     };
     const char* file_to_read = NULL;
-    int k = 4, m = 8192;
+    int k = 8, m = 16000;
     int next_option;
     
     program_name = argv[0];
@@ -76,7 +76,7 @@ int main(int argc, char *argv[]) {
     char word[MAX_SIZE_PASSWORD];
     while( fscanf(file,"%1024s",word)==1 ) {
         add_filter(f, word);
-        add_occ(hashTable, word, 0);
+        add_occ(hashTable, word);
     }
     fclose(file);
 

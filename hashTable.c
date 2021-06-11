@@ -7,7 +7,11 @@ table *create_table(int M){
     table* tb = malloc(sizeof(table));
     tb->M = M;
     tb->size = 0;
-    tb->bucket = calloc((size_t)tb->M, sizeof(link));
+    tb->bucket = (link**)malloc(sizeof(link*)*M);
+    int i;
+    for(i = 0; i<M; i++) {
+        tb->bucket[i] = NULL;
+    }
     return tb;
 }
 
@@ -15,9 +19,7 @@ void free_table(table* tb){
     int i =0;
     for(i=0 ;i<tb->M ;i++){
         link* lk = tb->bucket[i];
-        if(lk != NULL) {
-            free_link(lk);
-        }
+        free_list(lk);
     }
     free(tb->bucket);
     free(tb);
@@ -45,14 +47,12 @@ link *table_find(table* tb, char *str){
     return NULL;
 }
 
-void add_occ(table *tb, char *str, int pos){
+void add_occ(table *tb, char *str){
     link* lk = table_find(tb, str);
     int index = hashHash(str, 31, tb->M);
-    if(lk != NULL){
-        add_occurrence(lk,pos);
-    } else {
-        tb->bucket[index] = insert_first_list(tb->bucket[index],str,pos);
+    if(lk == NULL){
+        tb->bucket[index] = insert_first_list(tb->bucket[index],str);
+        tb->size++;
     }
-    tb->size++;
     return;
 }
