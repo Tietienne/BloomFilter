@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
         {NULL     , 0, NULL,  0 }
     };
     const char* file_to_read = NULL;
-    int k = 8, m = 16000;
+    int k = 6, m = 8000;
     int next_option;
     
     program_name = argv[0];
@@ -74,7 +74,9 @@ int main(int argc, char *argv[]) {
     filter* f = create_filter(m,k);
     table* hashTable = create_table(m);
     char word[MAX_SIZE_PASSWORD];
+    double nbWord = 0;
     while( fscanf(file,"%1024s",word)==1 ) {
+        nbWord++;
         add_filter(f, word);
         add_occ(hashTable, word);
     }
@@ -85,9 +87,11 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "File doesn't exist.\n");
         exit(1);
     }
-    int maybe = 0;
-    int isin = 0;
+    double maybe = 0;
+    double isin = 0;
+    double nbWordTested = 0;
     while( fscanf(file2,"%1024s",word)==1 ) {
+        nbWordTested++;
         if(is_member_filter(f, word)) {
             maybe++;
             if(table_find(hashTable, word) != NULL) {
@@ -99,6 +103,7 @@ int main(int argc, char *argv[]) {
     free_filter(f);
     free_table(hashTable);
 
-    printf("%d -> %d\n",maybe, isin);
+    printf("%f -> %f\n",nbWordTested,nbWord);
+    printf("%f -> %f\n",maybe, isin);
     return 0;
 }
