@@ -117,9 +117,9 @@ int main(int argc, char *argv[]) {
 
     // printf("%f -> %f\n",nbWordTested,nbWord);
     // printf("%f -> %f\n",maybe, isin);
-    float nbFakePos = maybe-isin;
-    float theoricalNb = pow((1-exp(-k*k/m)),k);
+    double nbFakePos = maybe-isin;
+    double theoricalNb = pow((1 - exp((-k*nbWord)/m)),k);
     printf("Real ratio fake positive : %f\n",nbFakePos/nbWordTested);
-    printf("Theorical ratio fake positive : %f\n", theoricalNb);
+    printf("Theorical ratio fake positive : %f\n", theoricalNb/nbWordTested);
     return 0;
 }
