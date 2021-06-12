@@ -1,8 +1,8 @@
 CC=gcc
-CFLAGS=-Wall -ansi -g
+CFLAGS=-Wall -ansi -g -std=c99
 LDFLAGS=-lm
-DEPS=bitarray.h filter.h link.h hashTable.h
-OBJ=bitarray.o filter.o link.o hashTable.o
+DEPS=bitarray.h filter.h link.h hashTable.h tree.h
+OBJ=bitarray.o filter.o link.o hashTable.o tree.o
 all:main test
 
 %.o: %.c $(DEPS)

@@ -3,12 +3,14 @@
 #include <string.h>
 #include <getopt.h>
 #include <time.h>
+#include <math.h>
 #include "bitarray.h"
 #include "filter.h"
 #include "hashTable.h"
 #include "link.h"
+#include "tree.h"
 
-#define MAX_SIZE_PASSWORD 128
+#define MAX_SIZE_PASSWORD 255
 
 const char* program_name;
 
@@ -32,7 +34,7 @@ int main(int argc, char *argv[]) {
         {NULL     , 0, NULL,  0 }
     };
     const char* file_to_read = NULL;
-    int k = 6, m = 8000;
+    int k = 3, m = 8000;
     int next_option;
     
     program_name = argv[0];
@@ -64,7 +66,6 @@ int main(int argc, char *argv[]) {
         }
     } while(next_option != -1);
 
-    /*TODO Programme ici*/
     FILE* file = fopen(file_to_read,"r");
     if(file == NULL) {
         fprintf(stderr, "File doesn't exist.\n");
@@ -73,16 +74,18 @@ int main(int argc, char *argv[]) {
 
     filter* f = create_filter(m,k);
     table* hashTable = create_table(m);
+    // node* bst = NULL;
     char word[MAX_SIZE_PASSWORD];
     double nbWord = 0;
     while( fscanf(file,"%1024s",word)==1 ) {
         nbWord++;
         add_filter(f, word);
         add_occ(hashTable, word);
+        // bst = insert_bst(bst, word);
     }
     fclose(file);
 
-    FILE* file2 = fopen("word.txt","r");
+    FILE* file2 = fopen("words/word.txt","r");
     if(file2 == NULL) {
         fprintf(stderr, "File doesn't exist.\n");
         exit(1);
@@ -92,6 +95,14 @@ int main(int argc, char *argv[]) {
     double nbWordTested = 0;
     while( fscanf(file2,"%1024s",word)==1 ) {
         nbWordTested++;
+        // if(table_find(hashTable, word) != NULL) {
+        //     isin++;
+        // }
+
+        // if (find_bst(bst, word) != NULL) {
+        //     isin++;
+        // }
+
         if(is_member_filter(f, word)) {
             maybe++;
             if(table_find(hashTable, word) != NULL) {
@@ -102,8 +113,13 @@ int main(int argc, char *argv[]) {
     fclose(file2);
     free_filter(f);
     free_table(hashTable);
+    // free_tree(bst);
 
-    printf("%f -> %f\n",nbWordTested,nbWord);
-    printf("%f -> %f\n",maybe, isin);
+    // printf("%f -> %f\n",nbWordTested,nbWord);
+    // printf("%f -> %f\n",maybe, isin);
+    float nbFakePos = maybe-isin;
+    float theoricalNb = pow((1-exp(-k*k/m)),k);
+    printf("Real ratio fake positive : %f\n",nbFakePos/nbWordTested);
+    printf("Theorical ratio fake positive : %f\n", theoricalNb);
     return 0;
 }
